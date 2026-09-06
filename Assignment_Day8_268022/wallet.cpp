@@ -3,21 +3,26 @@
 #include <limits>
 using namespace std;
 
-class InvalidAmountException {
+class InvalidAmountException
+{
     string message;
+
 public:
     InvalidAmountException(string msg) : message(msg) {}
     string what() const { return message; }
 };
 
-class InsufficientBalanceException {
+class InsufficientBalanceException
+{
     string message;
+
 public:
     InsufficientBalanceException(string msg) : message(msg) {}
     string what() const { return message; }
 };
 
-class Wallet {
+class Wallet
+{
     string walletId;
     string holderName;
     double balance;
@@ -33,28 +38,34 @@ public:
     void setWalletId(string id) { walletId = id; }
     void setHolderName(string name) { holderName = name; }
 
-    void addMoney(double amount) {
-        if (amount <= 0) {
+    void addMoney(double amount)
+    {
+        if (amount <= 0)
+        {
             throw InvalidAmountException("Amount must be positive.");
         }
         balance += amount;
     }
 
-    void withdrawMoney(double amount) {
-        if (amount <= 0) {
+    void withdrawMoney(double amount)
+    {
+        if (amount <= 0)
+        {
             throw InvalidAmountException("Amount must be positive.");
         }
-        if (amount > balance) {
+        if (amount > balance)
+        {
             throw InsufficientBalanceException("Insufficient balance.");
         }
         balance -= amount;
     }
 
-    friend istream& operator>>(istream& in, Wallet& w);
-    friend ostream& operator<<(ostream& out, const Wallet& w);
+    friend istream &operator>>(istream &in, Wallet &w);
+    friend ostream &operator<<(ostream &out, const Wallet &w);
 };
 
-istream& operator>>(istream& in, Wallet& w) {
+istream &operator>>(istream &in, Wallet &w)
+{
     cout << "Enter Wallet ID: ";
     in >> w.walletId;
     cout << "Enter Holder Name: ";
@@ -65,7 +76,8 @@ istream& operator>>(istream& in, Wallet& w) {
     return in;
 }
 
-ostream& operator<<(ostream& out, const Wallet& w) {
+ostream &operator<<(ostream &out, const Wallet &w)
+{
     out << "==============================" << endl;
     out << "Wallet ID      : " << w.walletId << endl;
     out << "Holder Name    : " << w.holderName << endl;
@@ -74,7 +86,8 @@ ostream& operator<<(ostream& out, const Wallet& w) {
     return out;
 }
 
-void displayMenu() {
+void displayMenu()
+{
     cout << "\n--- Digital Wallet Menu ---" << endl;
     cout << "1. Create Wallet" << endl;
     cout << "2. Add Money" << endl;
@@ -84,92 +97,109 @@ void displayMenu() {
     cout << "Enter your choice: ";
 }
 
-void clearInput() {
+void clearInput()
+{
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-int main() {
+int main()
+{
     Wallet wallet;
     bool walletCreated = false;
     int choice;
     double amount;
 
-    do {
+    do
+    {
         displayMenu();
         cin >> choice;
 
-        if (cin.fail()) {
+        if (cin.fail())
+        {
             clearInput();
             cout << "Invalid input. Please enter a number." << endl;
             continue;
         }
 
-        try {
-            switch (choice) {
-                case 1:
-                    cout << "\n--- Create Wallet ---" << endl;
-                    cin >> wallet;
-                    walletCreated = true;
-                    cout << "\nWallet created successfully!" << endl;
-                    cout << wallet;
-                    break;
+        try
+        {
+            switch (choice)
+            {
+            case 1:
+                cout << "\n--- Create Wallet ---" << endl;
+                cin >> wallet;
+                walletCreated = true;
+                cout << "\nWallet created successfully!" << endl;
+                cout << wallet;
+                break;
 
-                case 2:
-                    if (!walletCreated) {
-                        cout << "\nPlease create a wallet first." << endl;
-                        break;
-                    }
-                    cout << "\n--- Add Money ---" << endl;
-                    cout << "Enter amount to add: ";
-                    cin >> amount;
-                    if (cin.fail()) {
-                        clearInput();
-                        throw InvalidAmountException("Invalid input. Please enter a number.");
-                    }
-                    wallet.addMoney(amount);
-                    cout << "\nMoney added successfully!" << endl;
-                    cout << wallet;
+            case 2:
+                if (!walletCreated)
+                {
+                    cout << "\nPlease create a wallet first." << endl;
                     break;
+                }
+                cout << "\n--- Add Money ---" << endl;
+                cout << "Enter amount to add: ";
+                cin >> amount;
+                if (cin.fail())
+                {
+                    clearInput();
+                    throw InvalidAmountException("Invalid input. Please enter a number.");
+                }
+                wallet.addMoney(amount);
+                cout << "\nMoney added successfully!" << endl;
+                cout << wallet;
+                break;
 
-                case 3:
-                    if (!walletCreated) {
-                        cout << "\nPlease create a wallet first." << endl;
-                        break;
-                    }
-                    cout << "\n--- Withdraw Money ---" << endl;
-                    cout << "Enter amount to withdraw: ";
-                    cin >> amount;
-                    if (cin.fail()) {
-                        clearInput();
-                        throw InvalidAmountException("Invalid input. Please enter a number.");
-                    }
-                    wallet.withdrawMoney(amount);
-                    cout << "\nMoney withdrawn successfully!" << endl;
-                    cout << wallet;
+            case 3:
+                if (!walletCreated)
+                {
+                    cout << "\nPlease create a wallet first." << endl;
                     break;
+                }
+                cout << "\n--- Withdraw Money ---" << endl;
+                cout << "Enter amount to withdraw: ";
+                cin >> amount;
+                if (cin.fail())
+                {
+                    clearInput();
+                    throw InvalidAmountException("Invalid input. Please enter a number.");
+                }
+                wallet.withdrawMoney(amount);
+                cout << "\nMoney withdrawn successfully!" << endl;
+                cout << wallet;
+                break;
 
-                case 4:
-                    if (!walletCreated) {
-                        cout << "\nPlease create a wallet first." << endl;
-                        break;
-                    }
-                    cout << "\n--- Wallet Details ---" << endl;
-                    cout << wallet;
+            case 4:
+                if (!walletCreated)
+                {
+                    cout << "\nPlease create a wallet first." << endl;
                     break;
+                }
+                cout << "\n--- Wallet Details ---" << endl;
+                cout << wallet;
+                break;
 
-                case 5:
-                    cout << "\nExiting... Thank you!" << endl;
-                    break;
+            case 5:
+                cout << "\nExiting... Thank you!" << endl;
+                break;
 
-                default:
-                    cout << "\nInvalid choice. Please try again." << endl;
+            default:
+                cout << "\nInvalid choice. Please try again." << endl;
             }
-        } catch (InvalidAmountException& e) {
+        }
+        catch (InvalidAmountException &e)
+        {
             cout << "\n[Error] " << e.what() << endl;
-        } catch (InsufficientBalanceException& e) {
+        }
+        catch (InsufficientBalanceException &e)
+        {
             cout << "\n[Error] " << e.what() << endl;
-        } catch (...) {
+        }
+        catch (...)
+        {
             cout << "\n[Error] An unexpected error occurred." << endl;
         }
 
